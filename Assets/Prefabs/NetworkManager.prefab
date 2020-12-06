@@ -1,0 +1,168 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5361309005982721927
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5361309005982721925}
+  - component: {fileID: 5361309005982721926}
+  - component: {fileID: 6071549817222454537}
+  m_Layer: 0
+  m_Name: NetworkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5361309005982721925
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5361309005982721927}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5361309005982721926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5361309005982721927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1682170820, guid: 01701b64234b4d523d8045142cbc73fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DontDestroy: 1
+  RunInBackground: 1
+  LogLevel: 1
+  NetworkConfig:
+    ProtocolVersion: 0
+    NetworkTransport: {fileID: 6071549817222454537}
+    RegisteredScenes:
+    - MenuScene
+    - GameScene
+    AllowRuntimeSceneChanges: 0
+    NetworkedPrefabs:
+    - Prefab: {fileID: 7691461817810836026, guid: c293944274032446cb5697c9fa1b9a58, type: 3}
+      PlayerPrefab: 1
+    - Prefab: {fileID: 6021412467207159410, guid: e83fa22c6e2534cde91dea9e0387f17e, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 7691461817810836026, guid: a753fd95e24f6455c9f185961b876dcd, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 5045507660991760134, guid: e665f27b550134f73b61acec0592a7ef, type: 3}
+      PlayerPrefab: 0
+    PlayerPrefabHash:
+      Value: 4250651540520672882
+    CreatePlayerPrefab: 1
+    ReceiveTickrate: 64
+    MaxReceiveEventsPerTickRate: 500
+    EventTickrate: 64
+    MaxObjectUpdatesPerTick: -1
+    ClientConnectionBufferTimeout: 10
+    ConnectionApproval: 1
+    ConnectionData: 
+    SecondsHistory: 1
+    EnableTimeResync: 0
+    TimeResyncInterval: 30
+    EnableNetworkedVar: 1
+    EnsureNetworkedVarLengthSafety: 0
+    EnableSceneManagement: 1
+    ForceSamePrefabs: 1
+    UsePrefabSync: 0
+    RecycleNetworkIds: 1
+    NetworkIdRecycleDelay: 120
+    RpcHashSize: 0
+    LoadSceneTimeOut: 120
+    EnableMessageBuffering: 1
+    MessageBufferTimeout: 20
+    EnableNetworkLogs: 1
+    EnableEncryption: 0
+    SignKeyExchange: 0
+    ServerBase64PfxCertificate: 
+--- !u!114 &6071549817222454537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5361309005982721927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2103117103, guid: 8200d44bb5d664a60a79fc7c1ab97728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConnectAddress: 127.0.0.1
+  Port: 7777
+  Channels: []
+  TransportBufferSize: 8192
+  LogLevel: 1
+  EnableSyncronizationEvent: 0
+  EnableSyncronizedCallbacks: 0
+  EventQueueSize: 8192
+  ProcessingQueueSize: 8192
+  HeapPointersPoolSize: 1024
+  HeapMemoryPoolSize: 1024
+  MemoryWrapperPoolSize: 1024
+  ChannelPoolSize: 1024
+  PooledChannels: -1
+  UseIPv6Dual: 1
+  AllowUnconnectedMessages: 0
+  AllowBroadcasts: 0
+  EnableAckNotifications: 0
+  LogicDelay: 50
+  ReuseChannels: 1
+  LogicThreads: 1
+  SocketThreads: 1
+  ProcessingThreads: 0
+  MaxMergeMessageSize: 1024
+  MaxMergeDelay: 15
+  EnableMergedAcks: 1
+  MergedAckBytes: 8
+  MaximumMTU: 4096
+  MinimumMTU: 512
+  EnablePathMTU: 1
+  MaxMTUAttempts: 8
+  MTUAttemptDelay: 1000
+  MTUGrowthFactor: 1.25
+  MaxFragments: 512
+  MaxBufferSize: 5120
+  HandshakeTimeout: 20000
+  ConnectionTimeout: 20000
+  HeartbeatDelay: 5000
+  HandshakeResendDelay: 500
+  MaxHandshakeResends: 20
+  ConnectionRequestMinResendDelay: 500
+  MaxConnectionRequestResends: 5
+  ConnectionRequestTimeout: 5000
+  ChallengeDifficulty: 20
+  ConnectionChallengeHistory: 2048
+  ConnectionChallengeTimeWindow: 300
+  TimeBasedConnectionChallenge: 1
+  AmplificationPreventionHandshakePadding: 512
+  ReliabilityWindowSize: 512
+  ReliableAckFlowWindowSize: 1024
+  ReliabilityMaxResendAttempts: 30
+  ReliabilityResendRoundtripMultiplier: 1.2
+  ReliabilityMinPacketResendDelay: 100
+  ReliabilityMinAckResendDelay: 100
+  UseSimulator: 0
+  DropPercentage: 0.1
+  MaxLatency: 300
+  MinLatency: 100
+  EnableHeartbeats: 1
+  EnableTimeouts: 1
+  EnableChannelUpdates: 1
+  EnableConnectionRequestResends: 1
+  EnablePacketMerging: 1
