@@ -90,7 +90,8 @@ public class IVGameManager : MonoBehaviour
                 StartCoroutine(CheckVisibilityInMultipleFrames());
             }
         }
-        else if(Time.time > m_lastIntervalledUpdate + m_updateInterval)
+        //else
+        if(Time.time > m_lastIntervalledUpdate + m_updateInterval)
         {
             m_lastIntervalledUpdate = Time.time;
 

@@ -75,7 +75,7 @@ MonoBehaviour:
     m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Ping: 0ms'
@@ -92,7 +92,6 @@ GameObject:
   - component: {fileID: 694730214428959728}
   - component: {fileID: 8447900423993127290}
   - component: {fileID: 1557124013495266858}
-  - component: {fileID: 1210540186}
   m_Layer: 5
   m_Name: MobileInputView
   m_TagString: Untagged
@@ -192,25 +191,3 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 32
---- !u!114 &1210540186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8437491193054387122}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c6dc40466b404007bcc00d60bf6453d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _root: {fileID: 0}
-  _movement: {fileID: 0}
-  _look: {fileID: 0}
-  _jump: {fileID: 0}
-  _interactButtonRight: {fileID: 0}
-  _interactButtonLeft: {fileID: 0}
-  _joystick: {fileID: 0}
-  _joystickOrigin: {fileID: 0}
-  _scopeButton: {fileID: 0}
-  _scopeCancelButton: {fileID: 0}

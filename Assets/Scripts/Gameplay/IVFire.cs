@@ -97,19 +97,15 @@ public class IVFire : NetworkedBehaviour
             float clientTime = reader.ReadSingle();
             Vector3 shootPos = reader.ReadVector3Packed();
             Vector3 shootDirection = reader.ReadVector3Packed();
+            //Debug.Log($"Received CT: {clientTime} ServerT Now: {NetworkingManager.Singleton.NetworkTime}");
 
-
-            List<ulong> otherClients = IVGameManager.Instance.GetClientIdsListExcept(clientId);
-            if(null != otherClients && otherClients.Count > 0)
+            // Call fire rpc on other clients to instantiate the bullet
+            using (PooledBitWriter writer = PooledBitWriter.Get(stream))
             {
-                // Call fire rpc on other clients to instantiate the bullet
-                using (PooledBitWriter writer = PooledBitWriter.Get(stream))
-                {
-                    writer.WriteVector3Packed(shootPos);
-                    writer.WriteVector3Packed(shootDirection);
+                writer.WriteVector3Packed(shootPos);
+                writer.WriteVector3Packed(shootDirection);
 
-                    InvokeClientRpcOnEveryoneExceptPerformance(FireOnClient, clientId, stream);
-                }
+                InvokeClientRpcOnEveryoneExceptPerformance(FireOnClient, clientId, stream);
             }
 
             PerformShootRaycast(clientTime, shootPos, shootDirection);
@@ -124,14 +120,21 @@ public class IVFire : NetworkedBehaviour
         //obj.UnSpawn();
     }
 
+
+    // [Note] Lad Compensation is still not working fine. The problem is because of client and server time mismatch.
     private void PerformShootRaycast(float clientTime, Vector3 shootPos, Vector3 shootDir)
     {
         if (!this.IsServer)
             return;
 
-        // Round the float to 2 decimal points
-        float secondsAgo = Mathf.Round((NetworkingManager.Singleton.NetworkTime - clientTime) * 100) / 100f;
-        Debug.Log($"PerformShootRaycast secondsAgo: {secondsAgo}");
+        // [Hack]Round the float to 2 decimal points otherwisse we will get KeyNotFound exception
+        //float secondsAgo = Mathf.Round((NetworkingManager.Singleton.NetworkTime - clientTime) * 100) / 100f;
+
+        // We will use round trip time instead of client time.
+        float rttInSeconds = NetworkingManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(this.OwnerClientId)/1000f;
+        float secondsAgo = (rttInSeconds/ 2f);
+
+        //Debug.Log($"PerformShootRaycast secondsAgo: {secondsAgo} Rtt: {rttInSeconds}");
 
         LagCompensationManager.Simulate(secondsAgo, () => {
             RaycastHit hit;

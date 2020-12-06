@@ -53,6 +53,7 @@ MonoBehaviour:
     RegisteredScenes:
     - MenuScene
     - GameScene
+    - 
     AllowRuntimeSceneChanges: 0
     NetworkedPrefabs:
     - Prefab: {fileID: 7691461817810836026, guid: c293944274032446cb5697c9fa1b9a58, type: 3}
@@ -74,7 +75,7 @@ MonoBehaviour:
     ConnectionApproval: 1
     ConnectionData: 
     SecondsHistory: 1
-    EnableTimeResync: 0
+    EnableTimeResync: 1
     TimeResyncInterval: 30
     EnableNetworkedVar: 1
     EnsureNetworkedVarLengthSafety: 0
