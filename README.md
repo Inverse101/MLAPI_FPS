@@ -22,3 +22,10 @@ It can be done in two ways.
 2. Make Mac / Windows build.
 
 Once you have done this. Run the project. Choose "Start Server" on one instance and "Start Client" On other
+
+
+## Work in Progress
+
+* Getting LagCompensation to work. 
+* Optimising Network Transform to use delta compression
+* Integrating 3D character models and Animation
