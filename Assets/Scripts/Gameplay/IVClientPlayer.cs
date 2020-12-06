@@ -62,6 +62,9 @@ public class IVClientPlayer : NetworkedBehaviour
         // If this is server
         if (this.IsServer)
         {
+            gameObject.layer = LayerMask.NameToLayer(IVConstants.LAYER_REMOTE_PLAYER);
+            gameObject.tag = IVConstants.TAG_REMOTE_PLAYER;
+
             // Only server / host can set the health
             SetHealth(100);
 
