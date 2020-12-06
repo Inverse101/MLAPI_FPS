@@ -251,6 +251,7 @@ public class IVGameManager : MonoBehaviour
 
     private void UpdatePing()
     {
-        m_ping.text = string.Format("Ping: {0}", NetworkingManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkingManager.Singleton.LocalClientId));
+        // Commented because its throwing KeyNotFound Exception in Ruffle Transport
+        //m_ping.text = string.Format("Ping: {0}", NetworkingManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkingManager.Singleton.LocalClientId));
     }
 }

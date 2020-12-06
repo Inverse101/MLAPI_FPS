@@ -130,12 +130,12 @@ public class IVFire : NetworkedBehaviour
             return;
 
         // Round the float to 2 decimal points
-        float secondsAgo = Mathf.Round((clientTime - NetworkingManager.Singleton.NetworkTime) * 100) / 100f;
+        float secondsAgo = Mathf.Round((NetworkingManager.Singleton.NetworkTime - clientTime) * 100) / 100f;
         Debug.Log($"PerformShootRaycast secondsAgo: {secondsAgo}");
 
         LagCompensationManager.Simulate(secondsAgo, () => {
             RaycastHit hit;
-            if (Physics.Raycast(shootPos, shootDir, out hit, m_currentWeapon.Range))
+            if (Physics.Raycast(shootPos, shootDir, out hit, m_currentWeapon.Range, LayerMask.GetMask(IVConstants.LAYER_REMOTE_PLAYER)))
             {
                 Debug.Log("Hit the target " + hit.transform.name);
                 if(hit.transform.CompareTag(IVConstants.TAG_REMOTE_PLAYER))

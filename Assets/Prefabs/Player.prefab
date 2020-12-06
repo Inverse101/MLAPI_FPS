@@ -596,7 +596,7 @@ MonoBehaviour:
   m_cameraFOV: {fileID: 7691461817809721370}
   m_currentWeapon:
     WeaponName: Rifle
-    Damage: 20
+    Damage: 50
     Range: 100
     ShootDelay: 0.2
   m_clientPlayer: {fileID: 7379468141005610999}
@@ -612,6 +612,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebf10df81b3fe4805ab2925b9565daa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_health:
+    InternalValue: 0
   m_playerUIPrefab: {fileID: 1786845701221883907, guid: 7c5a3f3f771794165b5752d43887ef1c, type: 3}
   m_fpsController: {fileID: 7691461817821048794}
   m_fire: {fileID: 7653800138708577512}

@@ -229,7 +229,6 @@ GameObject:
   - component: {fileID: 7691461817811322394}
   - component: {fileID: 7691461817822081018}
   - component: {fileID: 7691461817821048794}
-  - component: {fileID: 7691461817814202714}
   - component: {fileID: 7691461817815843802}
   - component: {fileID: 7041987556948984826}
   - component: {fileID: 4739526299965529154}
@@ -403,22 +402,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
   m_JumpSound: {fileID: 8300000, guid: 5897aeed9b676024fbb8c694b421a861, type: 3}
   m_LandSound: {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
---- !u!54 &7691461817814202714
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7691461817810836026}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!82 &7691461817815843802
 AudioSource:
   m_ObjectHideFlags: 0
@@ -596,7 +579,7 @@ MonoBehaviour:
   m_cameraFOV: {fileID: 7691461817809721370}
   m_currentWeapon:
     WeaponName: Rifle
-    Damage: 20
+    Damage: 50
     Range: 100
     ShootDelay: 0.2
   m_clientPlayer: {fileID: 7379468141005610999}
@@ -612,6 +595,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebf10df81b3fe4805ab2925b9565daa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_health:
+    InternalValue: 0
   m_playerUIPrefab: {fileID: 1786845701221883907, guid: 7c5a3f3f771794165b5752d43887ef1c, type: 3}
   m_fpsController: {fileID: 7691461817821048794}
   m_fire: {fileID: 7653800138708577512}

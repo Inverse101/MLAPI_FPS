@@ -44,6 +44,7 @@ public class IVClientPlayer : NetworkedBehaviour
             if (this.IsLocalPlayer)
             {
                 gameObject.layer = LayerMask.NameToLayer(IVConstants.LAYER_PLAYER);
+                gameObject.tag = IVConstants.TAG_PLAYER;
                 m_playerUI = Instantiate(m_playerUIPrefab);
                 m_playerUI.name = m_playerUIPrefab.name;
                 m_playerUI.SetActive(true);
@@ -52,6 +53,7 @@ public class IVClientPlayer : NetworkedBehaviour
             else
             {
                 gameObject.layer = LayerMask.NameToLayer(IVConstants.LAYER_REMOTE_PLAYER);
+                gameObject.tag = IVConstants.TAG_REMOTE_PLAYER;
                 m_fpsController.enabled = false;
                 DisableObjects();
             }
