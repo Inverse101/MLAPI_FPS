@@ -55,8 +55,7 @@ public class IVFire : NetworkedBehaviour
         {
             using (PooledBitWriter writer = PooledBitWriter.Get(stream))
             {
-                // Send Fire time to server
-                writer.WriteSingle(NetworkingManager.Singleton.NetworkTime);
+                //Send Fire time to server
                 writer.WriteVector3Packed(transform.position);
                 writer.WriteVector3Packed(m_cameraFOV.transform.forward);
 
@@ -94,10 +93,8 @@ public class IVFire : NetworkedBehaviour
     {
         using (PooledBitReader reader = PooledBitReader.Get(stream))
         {
-            float clientTime = reader.ReadSingle();
             Vector3 shootPos = reader.ReadVector3Packed();
             Vector3 shootDirection = reader.ReadVector3Packed();
-            //Debug.Log($"Received CT: {clientTime} ServerT Now: {NetworkingManager.Singleton.NetworkTime}");
 
             // Call fire rpc on other clients to instantiate the bullet
             using (PooledBitWriter writer = PooledBitWriter.Get(stream))
@@ -108,7 +105,7 @@ public class IVFire : NetworkedBehaviour
                 InvokeClientRpcOnEveryoneExceptPerformance(FireOnClient, clientId, stream);
             }
 
-            PerformShootRaycast(clientTime, shootPos, shootDirection);
+            PerformShootRaycast(0f, shootPos, shootDirection);
         }
     }
 
@@ -131,10 +128,12 @@ public class IVFire : NetworkedBehaviour
         //float secondsAgo = Mathf.Round((NetworkingManager.Singleton.NetworkTime - clientTime) * 100) / 100f;
 
         // We will use round trip time instead of client time.
-        float rttInSeconds = NetworkingManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(this.OwnerClientId)/1000f;
+        float rttInSeconds = this.IsHost ? 0f : NetworkingManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(this.OwnerClientId)/1000f;
+
+        // Mathf.Abs is a Hack to avoid negative value
         float secondsAgo = (rttInSeconds/ 2f);
 
-        //Debug.Log($"PerformShootRaycast secondsAgo: {secondsAgo} Rtt: {rttInSeconds}");
+        Debug.Log($"PerformShootRaycast secondsAgo: {secondsAgo} Rtt: {rttInSeconds}");
 
         LagCompensationManager.Simulate(secondsAgo, () => {
             RaycastHit hit;

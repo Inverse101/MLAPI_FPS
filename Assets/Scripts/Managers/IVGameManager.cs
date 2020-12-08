@@ -6,7 +6,7 @@ using MLAPI;
 using MLAPI.Spawning;
 using MLAPI.Connection;
 
-public class IVGameManager : MonoBehaviour
+public class IVGameManager : NetworkedBehaviour
 {
     public static IVGameManager Instance;
 
@@ -42,6 +42,8 @@ public class IVGameManager : MonoBehaviour
     private bool m_visibilityCheckRunning = false;
 
     private List<NetworkedObject> m_serverNPCList;
+
+    private bool m_isNetworkReady = false;
 
     private void Awake()
     {
@@ -79,8 +81,17 @@ public class IVGameManager : MonoBehaviour
     //    ClientTick++;
     //}
 
+    public override void NetworkStart()
+    {
+        base.NetworkStart();
+        m_isNetworkReady = true;
+    }
+
     private void Update()
     {
+        if (!m_isNetworkReady)
+            return;
+
         // Code which executes only on server
         if(NetworkingManager.Singleton.IsServer)
         {
@@ -90,8 +101,7 @@ public class IVGameManager : MonoBehaviour
                 StartCoroutine(CheckVisibilityInMultipleFrames());
             }
         }
-        //else
-        if(Time.time > m_lastIntervalledUpdate + m_updateInterval)
+        else if(!NetworkingManager.Singleton.IsHost && Time.time > m_lastIntervalledUpdate + m_updateInterval)
         {
             m_lastIntervalledUpdate = Time.time;
 
@@ -134,7 +144,7 @@ public class IVGameManager : MonoBehaviour
             //Debug.LogError("Could not grab GameObject from pool, Choosing the first bullet anyways");
             bullet = m_netowrkedBulletPool[0];
         }
-
+        
         bullet.transform.position = position;
         bullet.transform.rotation = rotation;
         bullet.gameObject.SetActive(true);
@@ -219,6 +229,9 @@ public class IVGameManager : MonoBehaviour
 
     private void HandleVisibilityOn(NetworkedObject client, NetworkedObject remoteObj)
     {
+        if (null == client || null == remoteObj)
+            return;
+
         float distance = Vector3.Distance(client.transform.position, remoteObj.transform.position);
 
         if (distance <= m_visRange && !remoteObj.IsNetworkVisibleTo(client.OwnerClientId))
@@ -253,6 +266,7 @@ public class IVGameManager : MonoBehaviour
     private void UpdatePing()
     {
         // Commented because its throwing KeyNotFound Exception in Ruffle Transport
-        //m_ping.text = string.Format("Ping: {0}", NetworkingManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkingManager.Singleton.LocalClientId));
+        if(m_isNetworkReady)
+            m_ping.text = string.Format("Ping: {0}", NetworkingManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkingManager.Singleton.ServerClientId));
     }
 }

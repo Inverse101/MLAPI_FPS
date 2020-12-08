@@ -67,7 +67,7 @@ MonoBehaviour:
   m_bulletPrefab: {fileID: 6021412467207159410, guid: e83fa22c6e2534cde91dea9e0387f17e, type: 3}
   m_ping: {fileID: 0}
   m_visInterval: 1
-  m_visRange: 50
+  m_visRange: 100
 --- !u!114 &7881545253864222932
 MonoBehaviour:
   m_ObjectHideFlags: 0
