@@ -27,7 +27,7 @@ public class IVFire : NetworkedBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -46,45 +46,80 @@ public class IVFire : NetworkedBehaviour
 
     //private void FixedUpdate()
     //{
-        
+
     //}
 
     private void Fire()
     {
+        Vector3 firePosition = transform.position;
+        Vector3 fireDirection = m_cameraFOV.transform.forward;
+
+        // Do server side hit detection only when there is a hit on client side. Just to save some server performance
+        bool shouldVerifyHitOnServer = true;
+
+        if (IVGameManager.Instance.m_useHitScan)
+            shouldVerifyHitOnServer = FireHitScan(firePosition, fireDirection);
+        else
+            shouldVerifyHitOnServer = InstantiateBullet(firePosition, fireDirection); // Instantiate bullet immediately on the client who is firing
+
         using (PooledBitStream stream = PooledBitStream.Get())
         {
             using (PooledBitWriter writer = PooledBitWriter.Get(stream))
             {
-                //Send Fire time to server
-                writer.WriteVector3Packed(transform.position);
-                writer.WriteVector3Packed(m_cameraFOV.transform.forward);
+                writer.WriteBool(shouldVerifyHitOnServer);
+                writer.WriteVector3Packed(firePosition);
+                writer.WriteVector3Packed(fireDirection);
 
                 InvokeServerRpcPerformance(FireOnServer, stream);
             }
         }
 
-        // Instantiate bullet immediately on the client who is firing
-        InstantiateBullet(transform.position, m_cameraFOV.transform.forward);
+
+        
     }
 
-    void InstantiateBullet(Vector3 pos, Vector3 direction)
+    bool FireHitScan(Vector3 pos, Vector3 direction)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(pos, direction, out hit, m_currentWeapon.Range, LayerMask.GetMask(IVConstants.LAYER_REMOTE_PLAYER)))
+        {
+            Debug.Log("[Client] Hit the target " + hit.transform.name);
+            if (hit.transform.CompareTag(IVConstants.TAG_REMOTE_PLAYER))
+            {
+                // Spawn blood effect
+                return true;
+            }
+            else
+            {
+                // Spawn effect based on surface
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    bool InstantiateBullet(Vector3 pos, Vector3 direction)
     {
         NetworkedObject bullet = IVGameManager.Instance.GetBulletFromPool(pos, Quaternion.LookRotation(direction));
         IVProjectileBullet projectile = bullet.GetComponent<IVProjectileBullet>();
         projectile.SetProjectileTravelDistance(m_currentWeapon.Range);
         projectile.Spawn(pos);
+        return true;
     }
 
     [ClientRPC]
     void FireOnClient(ulong clientId, Stream stream)
     {
-        //Debug.Log("FireOnClient " + clientId);
         using (PooledBitReader reader = PooledBitReader.Get(stream))
         {
             Vector3 shootPos = reader.ReadVector3Packed();
             Vector3 shootDirection = reader.ReadVector3Packed();
 
-            InstantiateBullet(shootPos, shootDirection);
+            if (IVGameManager.Instance.m_useHitScan)
+                FireHitScan(shootPos, shootDirection);
+            else
+                InstantiateBullet(shootPos, shootDirection);
         }
     }
 
@@ -93,6 +128,7 @@ public class IVFire : NetworkedBehaviour
     {
         using (PooledBitReader reader = PooledBitReader.Get(stream))
         {
+            bool shouldDoHitDetection = reader.ReadBool();
             Vector3 shootPos = reader.ReadVector3Packed();
             Vector3 shootDirection = reader.ReadVector3Packed();
 
@@ -105,7 +141,8 @@ public class IVFire : NetworkedBehaviour
                 InvokeClientRpcOnEveryoneExceptPerformance(FireOnClient, clientId, stream);
             }
 
-            PerformShootRaycast(0f, shootPos, shootDirection);
+            if(shouldDoHitDetection)
+                PerformShootRaycast(0f, shootPos, shootDirection);
         }
     }
 
@@ -128,19 +165,20 @@ public class IVFire : NetworkedBehaviour
         //float secondsAgo = Mathf.Round((NetworkingManager.Singleton.NetworkTime - clientTime) * 100) / 100f;
 
         // We will use round trip time instead of client time.
-        float rttInSeconds = this.IsHost ? 0f : NetworkingManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(this.OwnerClientId)/1000f;
+        float rttInSeconds = this.IsHost ? 0f : NetworkingManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(this.OwnerClientId) / 1000f;
 
         // Mathf.Abs is a Hack to avoid negative value
-        float secondsAgo = (rttInSeconds/ 2f);
+        float secondsAgo = (rttInSeconds / 2f);
 
         Debug.Log($"PerformShootRaycast secondsAgo: {secondsAgo} Rtt: {rttInSeconds}");
 
-        LagCompensationManager.Simulate(secondsAgo, () => {
+        LagCompensationManager.Simulate(secondsAgo, () =>
+        {
             RaycastHit hit;
             if (Physics.Raycast(shootPos, shootDir, out hit, m_currentWeapon.Range, LayerMask.GetMask(IVConstants.LAYER_REMOTE_PLAYER)))
             {
-                Debug.Log("Hit the target " + hit.transform.name);
-                if(hit.transform.CompareTag(IVConstants.TAG_REMOTE_PLAYER))
+                Debug.Log("[Server] Hit the target " + hit.transform.name);
+                if (hit.transform.CompareTag(IVConstants.TAG_REMOTE_PLAYER))
                 {
                     IVClientPlayer targetPlayer = hit.transform.GetComponent<IVClientPlayer>();
                     targetPlayer.TakeGamage(m_currentWeapon.Damage);

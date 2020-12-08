@@ -68,6 +68,7 @@ MonoBehaviour:
   m_ping: {fileID: 0}
   m_visInterval: 1
   m_visRange: 100
+  m_useHitScan: 1
 --- !u!114 &7881545253864222932
 MonoBehaviour:
   m_ObjectHideFlags: 0

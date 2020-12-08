@@ -33,6 +33,9 @@ public class IVGameManager : NetworkedBehaviour
     [SerializeField]
     public float m_visRange = 20;
 
+    [SerializeField]
+    public bool m_useHitScan = false;
+
     private float m_lastVisCheckTime = 0f;
 
     private float m_lastIntervalledUpdate = 0f;
