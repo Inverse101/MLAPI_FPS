@@ -28,7 +28,7 @@ public class IVNetworkInitialise : MonoBehaviour
         NetworkingManager.Singleton.NetworkConfig.ConnectionApproval = true;
         //clientCode = UnityEngine.Random.Range(1, 9999).ToString("0000");
 
-        SetupNetworkTransport("127.0.0.1", 7777);
+        SetupNetworkTransport(IVUtil.CONNECT_IP, IVUtil.CONNECT_PORT);
 
 #if DEDICATED_SERVER
         SetupDedicatedServer();

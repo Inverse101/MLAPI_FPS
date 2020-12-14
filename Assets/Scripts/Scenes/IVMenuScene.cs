@@ -9,7 +9,7 @@ public class IVMenuScene : MonoBehaviour
     void Start()
     {
         #if DEDICATED_SERVER
-        LBUtil.MLAPIMode = LBMLAPIMode.DEDICATED_SERVER;
+        IVUtil.MLAPIMode = LBMLAPIMode.DEDICATED_SERVER;
         LoadGameScene();
         #endif
     }

@@ -104,7 +104,7 @@ public class IVGameManager : NetworkedBehaviour
                 StartCoroutine(CheckVisibilityInMultipleFrames());
             }
         }
-        else if(!NetworkingManager.Singleton.IsHost && Time.time > m_lastIntervalledUpdate + m_updateInterval)
+        else if (!NetworkingManager.Singleton.IsHost && Time.time > m_lastIntervalledUpdate + m_updateInterval)
         {
             m_lastIntervalledUpdate = Time.time;
 
@@ -269,7 +269,7 @@ public class IVGameManager : NetworkedBehaviour
     private void UpdatePing()
     {
         // Commented because its throwing KeyNotFound Exception in Ruffle Transport
-        if(m_isNetworkReady)
+        if (m_isNetworkReady)
             m_ping.text = string.Format("Ping: {0}", NetworkingManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkingManager.Singleton.ServerClientId));
     }
 }
