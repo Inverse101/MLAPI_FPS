@@ -325,6 +325,56 @@ public class ApiMetrics
     }
 
 
+	public delegate void CcucountDelegate(object result, string error);
+    public class CcucountRequest {  public object Result=new object();public string Error=""; public Request rq;
+        public void Start(CcucountDelegate del = null, MonoBehaviour co = null) {Client.StartCo(co,Run(del));}
+        public IEnumerator Run(CcucountDelegate del = null) { yield return rq.Send(); CcucountDone(this); del?.Invoke(Result, Error); }
+    }
+
+    public static CcucountRequest Ccucount(MetricsQueryIn input, Context ctx=null)
+    {
+        if (ctx == null) ctx = Context.Def;
+        CcucountRequest rq=new CcucountRequest();
+        rq.rq = Client.CreateRequest(ctx, "metrics_ccucount", input);
+        return rq;
+    }
+
+    public static void CcucountDone(CcucountRequest rq)
+    {
+        rq.Error = rq.rq.Error;
+        JSONObject rd = rq.rq.ResponseData as JSONObject;
+        if (rd != null)
+        {
+            rq.Result = (object)rd.ToObject(new object());
+        }
+    }
+
+
+	public delegate void CcucounttotalDelegate(object result, string error);
+    public class CcucounttotalRequest {  public object Result=new object();public string Error=""; public Request rq;
+        public void Start(CcucounttotalDelegate del = null, MonoBehaviour co = null) {Client.StartCo(co,Run(del));}
+        public IEnumerator Run(CcucounttotalDelegate del = null) { yield return rq.Send(); CcucounttotalDone(this); del?.Invoke(Result, Error); }
+    }
+
+    public static CcucounttotalRequest Ccucounttotal(MetricsQueryIn input, Context ctx=null)
+    {
+        if (ctx == null) ctx = Context.Def;
+        CcucounttotalRequest rq=new CcucounttotalRequest();
+        rq.rq = Client.CreateRequest(ctx, "metrics_ccucounttotal", input);
+        return rq;
+    }
+
+    public static void CcucounttotalDone(CcucounttotalRequest rq)
+    {
+        rq.Error = rq.rq.Error;
+        JSONObject rd = rq.rq.ResponseData as JSONObject;
+        if (rd != null)
+        {
+            rq.Result = (object)rd.ToObject(new object());
+        }
+    }
+
+
 }
 
 } //namespace Zeuz

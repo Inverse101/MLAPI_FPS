@@ -59,6 +59,26 @@ public class Session : ItemCommon
 	public Session(Session _copy) { if (_copy == null) return;ID=_copy.ID;SessionKey=_copy.SessionKey;Dev=_copy.Dev;User=_copy.User;ApiKey=_copy.ApiKey;AdminEmail=_copy.AdminEmail;if(_copy.AdminPerms!=null)AdminPerms=_copy.AdminPerms;}
 };
 
+public class AuthSessionAuthIn
+{
+	public string ID="";
+	public string ReqSignedHash="";
+	public string ReqID="";
+	public Timestamp ReqTime=new Timestamp();
+	public AuthSessionAuthIn(string _id="",string _reqsignedhash="",string _reqid="",Timestamp _reqtime=new Timestamp()) {ID=_id;ReqSignedHash=_reqsignedhash;ReqID=_reqid;ReqTime=_reqtime;}
+	public AuthSessionAuthIn(AuthSessionAuthIn _copy) { if (_copy == null) return;ID=_copy.ID;ReqSignedHash=_copy.ReqSignedHash;ReqID=_copy.ReqID;ReqTime=_copy.ReqTime;}
+};
+
+public class AuthSessionAuthOut
+{
+	public string Dev="";
+	public string User="";
+	public string APIKey="";
+	public ACL ACL=new ACL();
+	public AuthSessionAuthOut(string _dev="",string _user="",string _apikey="",ACL _acl=null) {Dev=_dev;User=_user;APIKey=_apikey;if(_acl!=null)ACL=_acl;}
+	public AuthSessionAuthOut(AuthSessionAuthOut _copy) { if (_copy == null) return;Dev=_copy.Dev;User=_copy.User;APIKey=_copy.APIKey;if(_copy.ACL!=null)ACL=_copy.ACL;}
+};
+
 
 public class ApiAuth
 { 
@@ -178,6 +198,31 @@ public class ApiAuth
         if (rd != null)
         {
             rq.Result = (AdminLoginResult)rd.ToObject(new AdminLoginResult());
+        }
+    }
+
+
+	public delegate void SessionauthorizeDelegate(AuthSessionAuthOut result, string error);
+    public class SessionauthorizeRequest {  public AuthSessionAuthOut Result=new AuthSessionAuthOut();public string Error=""; public Request rq;
+        public void Start(SessionauthorizeDelegate del = null, MonoBehaviour co = null) {Client.StartCo(co,Run(del));}
+        public IEnumerator Run(SessionauthorizeDelegate del = null) { yield return rq.Send(); SessionauthorizeDone(this); del?.Invoke(Result, Error); }
+    }
+
+    public static SessionauthorizeRequest Sessionauthorize(AuthSessionAuthIn input, Context ctx=null)
+    {
+        if (ctx == null) ctx = Context.Def;
+        SessionauthorizeRequest rq=new SessionauthorizeRequest();
+        rq.rq = Client.CreateRequest(ctx, "auth_sessionauthorize", input);
+        return rq;
+    }
+
+    public static void SessionauthorizeDone(SessionauthorizeRequest rq)
+    {
+        rq.Error = rq.rq.Error;
+        JSONObject rd = rq.rq.ResponseData as JSONObject;
+        if (rd != null)
+        {
+            rq.Result = (AuthSessionAuthOut)rd.ToObject(new AuthSessionAuthOut());
         }
     }
 

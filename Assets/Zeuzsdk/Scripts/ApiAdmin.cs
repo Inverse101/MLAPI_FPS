@@ -124,6 +124,7 @@ public class ItemCommon
 public class ProvisioningAccount
 {
 	public string ProviderID="";
+	public string ProviderName="";
 	public bool SpawnInstances=false;
 	public string Username="";
 	public string Password="";
@@ -134,11 +135,12 @@ public class ProvisioningAccount
 	public string TenantID="";
 	public string ClientID="";
 	public string ClientSecret="";
+	public string ProjectID="";
 	public string GcpCredentialsFile="";
 	public string GcpFileName="";
 	public Timestamp GcpUploadFileDate=new Timestamp();
-	public ProvisioningAccount(string _providerid="",bool _spawninstances=false,string _username="",string _password="",string _apikey="",string _secretid="",string _secretkey="",string _subscriptionid="",string _tenantid="",string _clientid="",string _clientsecret="",string _gcpcredentialsfile="",string _gcpfilename="",Timestamp _gcpuploadfiledate=new Timestamp()) {ProviderID=_providerid;SpawnInstances=_spawninstances;Username=_username;Password=_password;APIKey=_apikey;SecretID=_secretid;SecretKey=_secretkey;SubscriptionID=_subscriptionid;TenantID=_tenantid;ClientID=_clientid;ClientSecret=_clientsecret;GcpCredentialsFile=_gcpcredentialsfile;GcpFileName=_gcpfilename;GcpUploadFileDate=_gcpuploadfiledate;}
-	public ProvisioningAccount(ProvisioningAccount _copy) { if (_copy == null) return;ProviderID=_copy.ProviderID;SpawnInstances=_copy.SpawnInstances;Username=_copy.Username;Password=_copy.Password;APIKey=_copy.APIKey;SecretID=_copy.SecretID;SecretKey=_copy.SecretKey;SubscriptionID=_copy.SubscriptionID;TenantID=_copy.TenantID;ClientID=_copy.ClientID;ClientSecret=_copy.ClientSecret;GcpCredentialsFile=_copy.GcpCredentialsFile;GcpFileName=_copy.GcpFileName;GcpUploadFileDate=_copy.GcpUploadFileDate;}
+	public ProvisioningAccount(string _providerid="",string _providername="",bool _spawninstances=false,string _username="",string _password="",string _apikey="",string _secretid="",string _secretkey="",string _subscriptionid="",string _tenantid="",string _clientid="",string _clientsecret="",string _projectid="",string _gcpcredentialsfile="",string _gcpfilename="",Timestamp _gcpuploadfiledate=new Timestamp()) {ProviderID=_providerid;ProviderName=_providername;SpawnInstances=_spawninstances;Username=_username;Password=_password;APIKey=_apikey;SecretID=_secretid;SecretKey=_secretkey;SubscriptionID=_subscriptionid;TenantID=_tenantid;ClientID=_clientid;ClientSecret=_clientsecret;ProjectID=_projectid;GcpCredentialsFile=_gcpcredentialsfile;GcpFileName=_gcpfilename;GcpUploadFileDate=_gcpuploadfiledate;}
+	public ProvisioningAccount(ProvisioningAccount _copy) { if (_copy == null) return;ProviderID=_copy.ProviderID;ProviderName=_copy.ProviderName;SpawnInstances=_copy.SpawnInstances;Username=_copy.Username;Password=_copy.Password;APIKey=_copy.APIKey;SecretID=_copy.SecretID;SecretKey=_copy.SecretKey;SubscriptionID=_copy.SubscriptionID;TenantID=_copy.TenantID;ClientID=_copy.ClientID;ClientSecret=_copy.ClientSecret;ProjectID=_copy.ProjectID;GcpCredentialsFile=_copy.GcpCredentialsFile;GcpFileName=_copy.GcpFileName;GcpUploadFileDate=_copy.GcpUploadFileDate;}
 };
 
 public class Account : ItemCommon

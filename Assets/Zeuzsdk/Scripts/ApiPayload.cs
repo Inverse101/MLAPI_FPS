@@ -52,6 +52,7 @@ public class PayloadInfo
 	public List<string> Regions=new List<string>();
 	public PayloadDef PayloadDef=new PayloadDef();
 	public bool Active=false;
+	public bool Reservable=false;
 	public bool Reserved=false;
 	public string IP="";
 	public List<PayloadPortMapping> PortMapping=new List<PayloadPortMapping>();
@@ -59,8 +60,8 @@ public class PayloadInfo
 	public string LocationType="";
 	public Timestamp Created=new Timestamp();
 	public Timestamp Modified=new Timestamp();
-	public PayloadInfo(string _payloadid="",string _machineid="",string _allocationid="",string _envid="",List<string> _regions=null,PayloadDef _payloaddef=null,bool _active=false,bool _reserved=false,string _ip="",List<PayloadPortMapping> _portmapping=null,string _handling="",string _locationtype="",Timestamp _created=new Timestamp(),Timestamp _modified=new Timestamp()) {PayloadID=_payloadid;MachineID=_machineid;AllocationID=_allocationid;EnvID=_envid;if(_regions!=null)Regions=_regions;if(_payloaddef!=null)PayloadDef=_payloaddef;Active=_active;Reserved=_reserved;IP=_ip;if(_portmapping!=null)PortMapping=_portmapping;Handling=_handling;LocationType=_locationtype;Created=_created;Modified=_modified;}
-	public PayloadInfo(PayloadInfo _copy) { if (_copy == null) return;PayloadID=_copy.PayloadID;MachineID=_copy.MachineID;AllocationID=_copy.AllocationID;EnvID=_copy.EnvID;if(_copy.Regions!=null)Regions=_copy.Regions;if(_copy.PayloadDef!=null)PayloadDef=_copy.PayloadDef;Active=_copy.Active;Reserved=_copy.Reserved;IP=_copy.IP;if(_copy.PortMapping!=null)PortMapping=_copy.PortMapping;Handling=_copy.Handling;LocationType=_copy.LocationType;Created=_copy.Created;Modified=_copy.Modified;}
+	public PayloadInfo(string _payloadid="",string _machineid="",string _allocationid="",string _envid="",List<string> _regions=null,PayloadDef _payloaddef=null,bool _active=false,bool _reservable=false,bool _reserved=false,string _ip="",List<PayloadPortMapping> _portmapping=null,string _handling="",string _locationtype="",Timestamp _created=new Timestamp(),Timestamp _modified=new Timestamp()) {PayloadID=_payloadid;MachineID=_machineid;AllocationID=_allocationid;EnvID=_envid;if(_regions!=null)Regions=_regions;if(_payloaddef!=null)PayloadDef=_payloaddef;Active=_active;Reservable=_reservable;Reserved=_reserved;IP=_ip;if(_portmapping!=null)PortMapping=_portmapping;Handling=_handling;LocationType=_locationtype;Created=_created;Modified=_modified;}
+	public PayloadInfo(PayloadInfo _copy) { if (_copy == null) return;PayloadID=_copy.PayloadID;MachineID=_copy.MachineID;AllocationID=_copy.AllocationID;EnvID=_copy.EnvID;if(_copy.Regions!=null)Regions=_copy.Regions;if(_copy.PayloadDef!=null)PayloadDef=_copy.PayloadDef;Active=_copy.Active;Reservable=_copy.Reservable;Reserved=_copy.Reserved;IP=_copy.IP;if(_copy.PortMapping!=null)PortMapping=_copy.PortMapping;Handling=_copy.Handling;LocationType=_copy.LocationType;Created=_copy.Created;Modified=_copy.Modified;}
 };
 
 public class PayloadGetOut
@@ -108,8 +109,9 @@ public class PayloadUpdateIn
 {
 	public string PayloadID="";
 	public PayloadDef PayloadDef=new PayloadDef();
-	public PayloadUpdateIn(string _payloadid="",PayloadDef _payloaddef=null) {PayloadID=_payloadid;if(_payloaddef!=null)PayloadDef=_payloaddef;}
-	public PayloadUpdateIn(PayloadUpdateIn _copy) { if (_copy == null) return;PayloadID=_copy.PayloadID;if(_copy.PayloadDef!=null)PayloadDef=_copy.PayloadDef;}
+	public string PayloadRelocate="";
+	public PayloadUpdateIn(string _payloadid="",PayloadDef _payloaddef=null,string _payloadrelocate="") {PayloadID=_payloadid;if(_payloaddef!=null)PayloadDef=_payloaddef;PayloadRelocate=_payloadrelocate;}
+	public PayloadUpdateIn(PayloadUpdateIn _copy) { if (_copy == null) return;PayloadID=_copy.PayloadID;if(_copy.PayloadDef!=null)PayloadDef=_copy.PayloadDef;PayloadRelocate=_copy.PayloadRelocate;}
 };
 
 public class PayloadResumeIn
@@ -150,6 +152,14 @@ public class PayloadStateInfo
 	public Dictionary<string,string> PlayerList=new Dictionary<string,string>();
 	public PayloadStateInfo(string _payloadid="",int _state=0,int _playercount=0,Dictionary<string,string> _playerlist=null) {PayloadID=_payloadid;State=_state;PlayerCount=_playercount;if(_playerlist!=null)PlayerList=_playerlist;}
 	public PayloadStateInfo(PayloadStateInfo _copy) { if (_copy == null) return;PayloadID=_copy.PayloadID;State=_copy.State;PlayerCount=_copy.PlayerCount;if(_copy.PlayerList!=null)PlayerList=_copy.PlayerList;}
+};
+
+public class PayloadReserveLockSetIn
+{
+	public List<string> PayloadIDs=new List<string>();
+	public bool Lock=false;
+	public PayloadReserveLockSetIn(List<string> _payloadids=null,bool _lock=false) {if(_payloadids!=null)PayloadIDs=_payloadids;Lock=_lock;}
+	public PayloadReserveLockSetIn(PayloadReserveLockSetIn _copy) { if (_copy == null) return;if(_copy.PayloadIDs!=null)PayloadIDs=_copy.PayloadIDs;Lock=_copy.Lock;}
 };
 
 
@@ -471,6 +481,56 @@ public class ApiPayload
         if (rd != null)
         {
             rq.Result = (List<PayloadStateInfo>)rd.ToObject(new List<PayloadStateInfo>());
+        }
+    }
+
+
+	public delegate void ReservelocksetDelegate(bool result, string error);
+    public class ReservelocksetRequest {  public bool Result=false;public string Error=""; public Request rq;
+        public void Start(ReservelocksetDelegate del = null, MonoBehaviour co = null) {Client.StartCo(co,Run(del));}
+        public IEnumerator Run(ReservelocksetDelegate del = null) { yield return rq.Send(); ReservelocksetDone(this); del?.Invoke(Result, Error); }
+    }
+
+    public static ReservelocksetRequest Reservelockset(PayloadReserveLockSetIn input, Context ctx=null)
+    {
+        if (ctx == null) ctx = Context.Def;
+        ReservelocksetRequest rq=new ReservelocksetRequest();
+        rq.rq = Client.CreateRequest(ctx, "payload_reservelockset", input);
+        return rq;
+    }
+
+    public static void ReservelocksetDone(ReservelocksetRequest rq)
+    {
+        rq.Error = rq.rq.Error;
+        JSONObject rd = rq.rq.ResponseData as JSONObject;
+        if (rd != null)
+        {
+            rq.Result = (bool)rd.ToObject(false);
+        }
+    }
+
+
+	public delegate void ReservelocklistDelegate(List<string> result, string error);
+    public class ReservelocklistRequest {  public List<string> Result=new List<string>();public string Error=""; public Request rq;
+        public void Start(ReservelocklistDelegate del = null, MonoBehaviour co = null) {Client.StartCo(co,Run(del));}
+        public IEnumerator Run(ReservelocklistDelegate del = null) { yield return rq.Send(); ReservelocklistDone(this); del?.Invoke(Result, Error); }
+    }
+
+    public static ReservelocklistRequest Reservelocklist(List<string> input, Context ctx=null)
+    {
+        if (ctx == null) ctx = Context.Def;
+        ReservelocklistRequest rq=new ReservelocklistRequest();
+        rq.rq = Client.CreateRequest(ctx, "payload_reservelocklist", input);
+        return rq;
+    }
+
+    public static void ReservelocklistDone(ReservelocklistRequest rq)
+    {
+        rq.Error = rq.rq.Error;
+        JSONObject rd = rq.rq.ResponseData as JSONObject;
+        if (rd != null)
+        {
+            rq.Result = (List<string>)rd.ToObject(new List<string>());
         }
     }
 

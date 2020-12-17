@@ -26,7 +26,7 @@ public class IVUtil
             }
             return "127.0.0.1";
 #else
-            return "127.0.0.1";
+            return "217.20.118.4";
 #endif
         }
     }
@@ -43,7 +43,7 @@ public class IVUtil
             }
             return 7777;
 #else
-            return 7777;
+            return 32005;
 #endif
         }
     }

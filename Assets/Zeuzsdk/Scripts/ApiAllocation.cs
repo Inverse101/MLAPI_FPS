@@ -81,8 +81,9 @@ public class PayloadDef
 	public string Image="";
 	public List<string> Cmd=new List<string>();
 	public List<PortDef> Ports=new List<PortDef>();
-	public PayloadDef(string _hostos="",string _image="",List<string> _cmd=null,List<PortDef> _ports=null) {HostOS=_hostos;Image=_image;if(_cmd!=null)Cmd=_cmd;if(_ports!=null)Ports=_ports;}
-	public PayloadDef(PayloadDef _copy) { if (_copy == null) return;HostOS=_copy.HostOS;Image=_copy.Image;if(_copy.Cmd!=null)Cmd=_copy.Cmd;if(_copy.Ports!=null)Ports=_copy.Ports;}
+	public int ServerStats=0;
+	public PayloadDef(string _hostos="",string _image="",List<string> _cmd=null,List<PortDef> _ports=null,int _serverstats=0) {HostOS=_hostos;Image=_image;if(_cmd!=null)Cmd=_cmd;if(_ports!=null)Ports=_ports;ServerStats=_serverstats;}
+	public PayloadDef(PayloadDef _copy) { if (_copy == null) return;HostOS=_copy.HostOS;Image=_copy.Image;if(_copy.Cmd!=null)Cmd=_copy.Cmd;if(_copy.Ports!=null)Ports=_copy.Ports;ServerStats=_copy.ServerStats;}
 };
 
 public class PayloadQuota
@@ -216,6 +217,7 @@ public class AllocationPayloadInfo
 	public List<string> Regions=new List<string>();
 	public PayloadDef PayloadDef=new PayloadDef();
 	public bool Active=false;
+	public bool Reservable=false;
 	public bool Reserved=false;
 	public string IP="";
 	public List<AllocationPayloadPortMapping> PortMapping=new List<AllocationPayloadPortMapping>();
@@ -223,8 +225,8 @@ public class AllocationPayloadInfo
 	public string LocationType="";
 	public Timestamp Created=new Timestamp();
 	public Timestamp Modified=new Timestamp();
-	public AllocationPayloadInfo(string _payloadid="",string _machineid="",string _allocationid="",string _envid="",List<string> _regions=null,PayloadDef _payloaddef=null,bool _active=false,bool _reserved=false,string _ip="",List<AllocationPayloadPortMapping> _portmapping=null,string _handling="",string _locationtype="",Timestamp _created=new Timestamp(),Timestamp _modified=new Timestamp()) {PayloadID=_payloadid;MachineID=_machineid;AllocationID=_allocationid;EnvID=_envid;if(_regions!=null)Regions=_regions;if(_payloaddef!=null)PayloadDef=_payloaddef;Active=_active;Reserved=_reserved;IP=_ip;if(_portmapping!=null)PortMapping=_portmapping;Handling=_handling;LocationType=_locationtype;Created=_created;Modified=_modified;}
-	public AllocationPayloadInfo(AllocationPayloadInfo _copy) { if (_copy == null) return;PayloadID=_copy.PayloadID;MachineID=_copy.MachineID;AllocationID=_copy.AllocationID;EnvID=_copy.EnvID;if(_copy.Regions!=null)Regions=_copy.Regions;if(_copy.PayloadDef!=null)PayloadDef=_copy.PayloadDef;Active=_copy.Active;Reserved=_copy.Reserved;IP=_copy.IP;if(_copy.PortMapping!=null)PortMapping=_copy.PortMapping;Handling=_copy.Handling;LocationType=_copy.LocationType;Created=_copy.Created;Modified=_copy.Modified;}
+	public AllocationPayloadInfo(string _payloadid="",string _machineid="",string _allocationid="",string _envid="",List<string> _regions=null,PayloadDef _payloaddef=null,bool _active=false,bool _reservable=false,bool _reserved=false,string _ip="",List<AllocationPayloadPortMapping> _portmapping=null,string _handling="",string _locationtype="",Timestamp _created=new Timestamp(),Timestamp _modified=new Timestamp()) {PayloadID=_payloadid;MachineID=_machineid;AllocationID=_allocationid;EnvID=_envid;if(_regions!=null)Regions=_regions;if(_payloaddef!=null)PayloadDef=_payloaddef;Active=_active;Reservable=_reservable;Reserved=_reserved;IP=_ip;if(_portmapping!=null)PortMapping=_portmapping;Handling=_handling;LocationType=_locationtype;Created=_created;Modified=_modified;}
+	public AllocationPayloadInfo(AllocationPayloadInfo _copy) { if (_copy == null) return;PayloadID=_copy.PayloadID;MachineID=_copy.MachineID;AllocationID=_copy.AllocationID;EnvID=_copy.EnvID;if(_copy.Regions!=null)Regions=_copy.Regions;if(_copy.PayloadDef!=null)PayloadDef=_copy.PayloadDef;Active=_copy.Active;Reservable=_copy.Reservable;Reserved=_copy.Reserved;IP=_copy.IP;if(_copy.PortMapping!=null)PortMapping=_copy.PortMapping;Handling=_copy.Handling;LocationType=_copy.LocationType;Created=_copy.Created;Modified=_copy.Modified;}
 };
 
 
