@@ -5,6 +5,7 @@ using MLAPI;
 using System;
 using MLAPI.Spawning;
 using UnityEngine.SceneManagement;
+using MLAPI.Transports.UNET;
 
 public class IVNetworkInitialise : MonoBehaviour
 {
@@ -21,6 +22,11 @@ public class IVNetworkInitialise : MonoBehaviour
 
     [SerializeField]
     private int m_serverNPCCount = 10;
+
+    private void Awake()
+    {
+        
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +55,30 @@ public class IVNetworkInitialise : MonoBehaviour
     {
         ((RufflesTransport.RufflesTransport)NetworkingManager.Singleton.NetworkConfig.NetworkTransport).ConnectAddress = ip;
         ((RufflesTransport.RufflesTransport)NetworkingManager.Singleton.NetworkConfig.NetworkTransport).Port = port;
+
+        //RufflesTransport.RufflesTransport ruffles = GetComponent<RufflesTransport.RufflesTransport>();
+        //if(null != ruffles)
+        //{
+        //    ((RufflesTransport.RufflesTransport)NetworkingManager.Singleton.NetworkConfig.NetworkTransport).ConnectAddress = ip;
+        //    ((RufflesTransport.RufflesTransport)NetworkingManager.Singleton.NetworkConfig.NetworkTransport).Port = port;
+
+        //    ruffles.ConnectAddress = ip;
+        //    ruffles.Port = port;
+        //}
+        //else
+        //{
+        //    UnetTransport unet = GetComponent<UnetTransport>();
+        //    if (null != unet)
+        //    {
+        //        unet.ConnectAddress = ip;
+        //        unet.ConnectPort = port;
+
+        //        ((UnetTransport)NetworkingManager.Singleton.NetworkConfig.NetworkTransport).ConnectAddress = ip;
+        //        ((UnetTransport)NetworkingManager.Singleton.NetworkConfig.NetworkTransport).ConnectPort = port;
+        //    }
+
+
+        //}
     }
 
     private void OnDestroy()

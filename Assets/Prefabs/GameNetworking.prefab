@@ -48,7 +48,7 @@ MonoBehaviour:
   m_playerPrefab: {fileID: 7691461817810836026, guid: c293944274032446cb5697c9fa1b9a58, type: 3}
   m_serverNPCPrefab: {fileID: 7691461817810836026, guid: a753fd95e24f6455c9f185961b876dcd, type: 3}
   m_serverCamera: {fileID: 0}
-  m_serverNPCCount: 49
+  m_serverNPCCount: 10
 --- !u!114 &5045507660991760139
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -53,7 +53,6 @@ MonoBehaviour:
     RegisteredScenes:
     - MenuScene
     - GameScene
-    - 
     AllowRuntimeSceneChanges: 0
     NetworkedPrefabs:
     - Prefab: {fileID: 7691461817810836026, guid: c293944274032446cb5697c9fa1b9a58, type: 3}
@@ -104,8 +103,8 @@ MonoBehaviour:
   m_Script: {fileID: -2103117103, guid: 8200d44bb5d664a60a79fc7c1ab97728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConnectAddress: 127.0.0.1
-  Port: 7777
+  ConnectAddress: 
+  Port: 0
   Channels: []
   TransportBufferSize: 8192
   LogLevel: 1

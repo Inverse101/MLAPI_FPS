@@ -8,6 +8,7 @@ public class IVMenuScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 30;
         #if DEDICATED_SERVER
         IVUtil.MLAPIMode = LBMLAPIMode.DEDICATED_SERVER;
         LoadGameScene();
