@@ -23,11 +23,6 @@ public class IVNetworkInitialise : MonoBehaviour
     [SerializeField]
     private int m_serverNPCCount = 10;
 
-    private void Awake()
-    {
-        
-    }
-
     // Start is called before the first frame update
     void Start()
     {

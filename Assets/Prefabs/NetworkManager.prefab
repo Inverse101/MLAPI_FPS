@@ -157,7 +157,7 @@ MonoBehaviour:
   ReliabilityResendRoundtripMultiplier: 1.2
   ReliabilityMinPacketResendDelay: 100
   ReliabilityMinAckResendDelay: 100
-  UseSimulator: 0
+  UseSimulator: 1
   DropPercentage: 0.1
   MaxLatency: 300
   MinLatency: 100

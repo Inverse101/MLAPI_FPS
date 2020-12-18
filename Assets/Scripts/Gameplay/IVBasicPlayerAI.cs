@@ -9,6 +9,9 @@ public class IVBasicPlayerAI : MonoBehaviour
     [SerializeField]
     private Vector3 m_nextTargetPosition;
 
+    [SerializeField]
+    private bool m_allowMovement = true;
+
     private Transform m_cachedTransform;
 
     private void Awake()
@@ -25,11 +28,14 @@ public class IVBasicPlayerAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.SqrMagnitude(m_cachedTransform.position - m_nextTargetPosition) < 1f)
+        if(m_allowMovement)
         {
-            m_nextTargetPosition = IVUtil.GetRandomSpawnPoint();
-        }
+            if (Vector3.SqrMagnitude(m_cachedTransform.position - m_nextTargetPosition) < 1f)
+            {
+                m_nextTargetPosition = IVUtil.GetRandomSpawnPoint();
+            }
 
-        m_cachedTransform.position = Vector3.MoveTowards(m_cachedTransform.position, m_nextTargetPosition, m_speed * Time.deltaTime);
+            m_cachedTransform.position = Vector3.MoveTowards(m_cachedTransform.position, m_nextTargetPosition, m_speed * Time.deltaTime);
+        }
     }
 }
