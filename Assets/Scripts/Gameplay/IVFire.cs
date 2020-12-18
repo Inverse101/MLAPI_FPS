@@ -24,6 +24,9 @@ public class IVFire : NetworkedBehaviour
     [SerializeField]
     private IVClientPlayer m_clientPlayer;
 
+    [SerializeField]
+    private bool m_drawDebugRays = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,7 +54,7 @@ public class IVFire : NetworkedBehaviour
 
     private void Fire()
     {
-        Vector3 firePosition = transform.position;
+        Vector3 firePosition = m_cameraFOV.transform.position;
         Vector3 fireDirection = m_cameraFOV.transform.forward;
 
         // Do server side hit detection only when there is a hit on client side. Just to save some server performance
@@ -73,13 +76,13 @@ public class IVFire : NetworkedBehaviour
                 InvokeServerRpcPerformance(FireOnServer, stream);
             }
         }
-
-
-        
     }
 
     bool FireHitScan(Vector3 pos, Vector3 direction)
     {
+        if(m_drawDebugRays)
+            Debug.DrawRay(pos, direction * m_currentWeapon.Range, Color.red, 60, false);
+
         RaycastHit hit;
         if (Physics.Raycast(pos, direction, out hit, m_currentWeapon.Range, LayerMask.GetMask(IVConstants.LAYER_REMOTE_PLAYER)))
         {
@@ -95,7 +98,7 @@ public class IVFire : NetworkedBehaviour
                 return false;
             }
         }
-
+        
         return false;
     }
 
@@ -181,9 +184,11 @@ public class IVFire : NetworkedBehaviour
                 if (hit.transform.CompareTag(IVConstants.TAG_REMOTE_PLAYER))
                 {
                     IVClientPlayer targetPlayer = hit.transform.GetComponent<IVClientPlayer>();
-                    targetPlayer.TakeGamage(m_currentWeapon.Damage);
+                    //targetPlayer.TakeGamage(m_currentWeapon.Damage);
                 }
             }
+            if (m_drawDebugRays)
+                Debug.DrawRay(shootPos, shootDir * m_currentWeapon.Range, Color.green, 60, false);
         });
     }
 }
