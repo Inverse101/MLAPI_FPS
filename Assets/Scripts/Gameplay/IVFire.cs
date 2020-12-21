@@ -184,7 +184,7 @@ public class IVFire : NetworkedBehaviour
                 if (hit.transform.CompareTag(IVConstants.TAG_REMOTE_PLAYER))
                 {
                     IVClientPlayer targetPlayer = hit.transform.GetComponent<IVClientPlayer>();
-                    //targetPlayer.TakeGamage(m_currentWeapon.Damage);
+                    targetPlayer.TakeGamage(m_currentWeapon.Damage);
                 }
             }
             if (m_drawDebugRays)

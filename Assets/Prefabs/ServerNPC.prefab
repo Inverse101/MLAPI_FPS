@@ -583,6 +583,7 @@ MonoBehaviour:
     Range: 100
     ShootDelay: 0.1
   m_clientPlayer: {fileID: 7379468141005610999}
+  m_drawDebugRays: 0
 --- !u!114 &7379468141005610999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -626,4 +627,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_nextTargetPosition: {x: 0, y: 0, z: 0}
-  m_allowMovement: 0
+  m_allowMovement: 1

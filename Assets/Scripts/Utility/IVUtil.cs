@@ -20,12 +20,13 @@ public class IVUtil
         {
 #if DEDICATED_SERVER && !UNITY_EDITOR
             string[] args = System.Environment.GetCommandLineArgs();
-            if (null != args && args.Length >= 2)
+            if (null != args && args.Length >= 3)
             {
-                return args[args.Length-2];
+                return args[args.Length-3];
             }
             return "127.0.0.1";
 #else
+            //return "176.57.181.227";
             return "127.0.0.1";
 #endif
         }
@@ -37,12 +38,13 @@ public class IVUtil
         {
 #if DEDICATED_SERVER && !UNITY_EDITOR
             string[] args = System.Environment.GetCommandLineArgs();
-            if (null != args && args.Length >= 2)
+            if (null != args && args.Length >= 3)
             {
-                return System.Convert.ToUInt16(args[args.Length - 1]);
+                return System.Convert.ToUInt16(args[args.Length - 2]);
             }
             return 7777;
 #else
+            //return 32001;
             return 7777;
 #endif
         }
