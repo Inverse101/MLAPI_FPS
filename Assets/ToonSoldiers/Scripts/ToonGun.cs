@@ -14,13 +14,13 @@ public class ToonGun : MonoBehaviour
     private float _damage = 1f;
 
     [SerializeField]
-    private Transform _fireTransform;
-
-    [SerializeField]
     private ParticleSystem _muzzleFlash;
 
     [SerializeField]
     private AudioSource _gunAudioSource;
+
+    [SerializeField]
+    private Camera _camera;
 
     private float _timer;
 
@@ -40,7 +40,7 @@ public class ToonGun : MonoBehaviour
 
     private void FireGun()
     {
-        Ray ray = new Ray(_fireTransform.position, _fireTransform.forward);
+        Ray ray = _camera.ViewportPointToRay(Vector3.one * 0.5f);
         RaycastHit hitInfo;
 
         if(Physics.Raycast(ray, out hitInfo, 100))
@@ -51,5 +51,7 @@ public class ToonGun : MonoBehaviour
 
         _muzzleFlash.Play();
         _gunAudioSource.Play();
+
+        //Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 5);
     }
 }

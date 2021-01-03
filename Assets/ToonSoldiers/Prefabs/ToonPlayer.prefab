@@ -96,8 +96,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc2828e8ca9d4653bedb373fed25dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 500
-  _turnSpeed: 5
+  _forwardMoveSpeed: 7.5
+  _backwardMoveSpeed: 3
+  _turnSpeed: 250
 --- !u!114 &7079971653879279960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,9 +113,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fireRate: 0.2
   _damage: 1
-  _fireTransform: {fileID: 7669844554859850951}
   _muzzleFlash: {fileID: 5946865268825085817}
   _gunAudioSource: {fileID: 4258011433259699345}
+  _camera: {fileID: 0}
 --- !u!82 &4258011433259699345
 AudioSource:
   m_ObjectHideFlags: 0
@@ -392,6 +393,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 4bfb745a1a2f04743be2cdeefd2dea2c, type: 2}
+    - target: {fileID: 9500000, guid: c6acf3f29c109e4439950c8f6a85cb2b, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6acf3f29c109e4439950c8f6a85cb2b, type: 3}
 --- !u!4 &7014841692131131855 stripped

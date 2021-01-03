@@ -5,10 +5,13 @@ using UnityEngine;
 public class ToonMovement : MonoBehaviour
 {
     [SerializeField]
-    private float _moveSpeed = 500f;
+    private float _forwardMoveSpeed = 7.5f;
 
     [SerializeField]
-    private float _turnSpeed = 5f;
+    private float _backwardMoveSpeed = 4f;
+
+    [SerializeField]
+    private float _turnSpeed = 150f;
 
     private Animator _animator;
 
@@ -32,14 +35,14 @@ public class ToonMovement : MonoBehaviour
         var movement = new Vector3(horizontal, 0, vertical);
         _movementMagnitudeCache = movement.magnitude;
 
-        _characterController.SimpleMove(movement * Time.deltaTime * _moveSpeed);
+        _animator.SetFloat("Speed", vertical);
 
-        if(_movementMagnitudeCache > 0)
+        transform.Rotate(Vector3.up, horizontal * _turnSpeed * Time.deltaTime);
+
+        if(vertical != 0)
         {
-            Quaternion lookRotation = Quaternion.LookRotation(movement);
-            transform.rotation = Quaternion.Slerp(transform.rotation,  lookRotation, Time.deltaTime * _turnSpeed);
+            float moveSpeedToUse = (vertical > 0) ? _forwardMoveSpeed : _backwardMoveSpeed;
+            _characterController.SimpleMove(transform.forward * moveSpeedToUse * vertical);
         }
-
-        _animator.SetFloat("Speed", _movementMagnitudeCache);
     }
 }
