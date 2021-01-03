@@ -24,12 +24,16 @@ public class ToonMovement : MonoBehaviour
     {
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponentInChildren<Animator>();
+
+#if !UNITY_IOS || !UNITY_ANDROID
+        Cursor.lockState = CursorLockMode.Locked;
+#endif
     }
 
     // Update is called once per frame
     void Update()
     {
-        var horizontal = Input.GetAxis("Horizontal");
+        var horizontal = Input.GetAxis("Mouse X");
         var vertical = Input.GetAxis("Vertical");
 
         var movement = new Vector3(horizontal, 0, vertical);
@@ -44,5 +48,16 @@ public class ToonMovement : MonoBehaviour
             float moveSpeedToUse = (vertical > 0) ? _forwardMoveSpeed : _backwardMoveSpeed;
             _characterController.SimpleMove(transform.forward * moveSpeedToUse * vertical);
         }
+
+#if !UNITY_IOS || !UNITY_ANDROID
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+#endif
     }
 }
