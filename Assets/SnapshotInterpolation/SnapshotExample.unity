@@ -505,4 +505,4 @@ MonoBehaviour:
   Server: {fileID: 1123969336}
   Client: {fileID: 1464442391}
   NetworkLag: 0.05
-  SimulateNetworkTransformSync: 1
+  SimulateNetworkTransformSync: 0

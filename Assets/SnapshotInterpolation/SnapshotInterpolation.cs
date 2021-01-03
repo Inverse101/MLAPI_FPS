@@ -15,22 +15,32 @@ public class SnapshotInterpolation : MonoBehaviour
         public float DeliveryTime;
     }
 
-    float _lastSnapshot;
-    List<Snapshot> _clientSnapshots = new List<Snapshot>();
+    float               _lastSnapshot;
+    List<Snapshot>      _clientSnapshots            = new List<Snapshot>();
 
-    Queue<Snapshot> _clientSimulationQueue = new Queue<Snapshot>();
+    Queue<Snapshot>     _clientSimulationQueue      = new Queue<Snapshot>();
 
-    const float SNAPSHOT_INTERVAL = 0.1f;
+    const float         SNAPSHOT_INTERVAL           = 0.1f;
 
-    public float NetworkLag = 0.05f;
+    /// <summary>
+    /// Currently this is hardcoded to 200ms. We can dynamically calculate this based on latency, jitter etc to be
+    /// as close to the server player and provide smooth movement
+    /// </summary>
+    const float         INTERPOLATION_OFFSET        = 0.2f;
 
+    public float        NetworkLag                  = 0.05f;
+
+    private float       _clientInterpolationTime;
+
+    private Vector3     _interpolateTo;
+    private Vector3     _interpolateFrom;
+
+    private float       _interpolateAlpha;
 
     ///////////////// Network Transform Sync related fields /////////
-    public bool SimulateNetworkTransformSync = false;
+    public bool         SimulateNetworkTransformSync = false;
 
-    private Vector3 _interpolateTo;
-    private Vector3 _interpolateFrom;
-    private float _interpolationStartTime;
+    private float       _interpolationStartTime;
 
     // Start is called before the first frame update
     void Start()
@@ -52,32 +62,87 @@ public class SnapshotInterpolation : MonoBehaviour
 
     private void ClientReceiveDataFromServer()
     {
-        if (_clientSimulationQueue.Count > 0 && _clientSimulationQueue.Peek().DeliveryTime < Time.time)
+        if (!SimulateNetworkTransformSync)
+        {
+            while(_clientSimulationQueue.Count > 0 && _clientSimulationQueue.Peek().DeliveryTime < Time.time)
+            {
+                // First Snapshot
+                if(_clientSnapshots.Count == 0)
+                    _clientInterpolationTime = _clientSimulationQueue.Peek().Time - INTERPOLATION_OFFSET;
+
+                _clientSnapshots.Add(_clientSimulationQueue.Dequeue());
+            }
+        }
+        else
         {
             Snapshot snapshot = _clientSimulationQueue.Dequeue();
-
-            if (!SimulateNetworkTransformSync)
-            {
-                _clientSnapshots.Add(snapshot);
-            }
-            else
-            {
-                _interpolateFrom = Client.transform.position;
-                _interpolateTo = snapshot.Position;
-                _interpolationStartTime = Time.time;
-            }
+            _interpolateFrom = Client.transform.position;
+            _interpolateTo = snapshot.Position;
+            _interpolationStartTime = Time.time;
         }
     }
 
     private void ClientRenderLatestPosition()
     {
-        if (!SimulateNetworkTransformSync && _clientSnapshots.Count > 0)
+        if (!SimulateNetworkTransformSync)
         {
-            Client.transform.position = _clientSnapshots[_clientSnapshots.Count - 1].Position;
-        }
+            if(_clientSnapshots.Count > 0)
+            {
+                // Improvement: This needs to be adjusted when there is time sync issue
+                _clientInterpolationTime += Time.unscaledDeltaTime;
 
-        if (SimulateNetworkTransformSync)
+                _interpolateFrom = default(Vector3);
+                _interpolateTo = default(Vector3);
+                _interpolateAlpha = default(float);
+
+                for (int i = 0; i < _clientSnapshots.Count; ++i)
+                {
+                    if (i + 1 == _clientSnapshots.Count)
+                    {
+                        if (_clientSnapshots[0].Time > _clientInterpolationTime)
+                        {
+                            _interpolateFrom = _interpolateTo = _clientSnapshots[0].Position;
+                            _interpolateAlpha = 0;
+                        }
+                        else
+                        {
+                            _interpolateFrom = _interpolateTo = _clientSnapshots[i].Position;
+                            _interpolateAlpha = 0;
+                        }
+                    }
+                    else
+                    {
+                        //                c
+                        // [0][1][2][3][4][5][6][7][8][9]
+                        //              f  t
+                        int f = i, t = i + 1;
+
+                        if (_clientSnapshots[f].Time <= _clientInterpolationTime && _clientSnapshots[t].Time >= _clientInterpolationTime)
+                        {
+                            _interpolateFrom = _clientSnapshots[f].Position;
+                            _interpolateTo = _clientSnapshots[t].Position;
+
+                            // f = 101.4
+                            // v = 101.467
+                            // t = 101.5
+                            var range = _clientSnapshots[t].Time - _clientSnapshots[f].Time;
+                            var current = _clientSnapshots[t].Time - _clientInterpolationTime;
+
+                            _interpolateAlpha = 1 - Mathf.Clamp01(current / range);
+
+                            break;
+                        }
+                    }
+                }
+
+
+                Client.transform.position = Vector3.Lerp(_interpolateFrom, _interpolateTo, _interpolateAlpha);
+            }
+        }
+        else if (SimulateNetworkTransformSync)
+        {
             Client.transform.position = Vector3.Lerp(_interpolateFrom, _interpolateTo, Mathf.Clamp01(Time.time - _interpolationStartTime) / SNAPSHOT_INTERVAL);
+        }
     }
 
     void ServerMovement()
