@@ -45,10 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d578b2f06234511be99ac070bba94d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_playerPrefab: {fileID: 7691461817810836026, guid: c293944274032446cb5697c9fa1b9a58, type: 3}
-  m_serverNPCPrefab: {fileID: 7691461817810836026, guid: a753fd95e24f6455c9f185961b876dcd, type: 3}
+  m_playerPrefab: {fileID: 7691461817810836026, guid: c293944274032446cb5697c9fa1b9a58,
+    type: 3}
+  m_serverNPCPrefab: {fileID: 7691461817810836026, guid: a753fd95e24f6455c9f185961b876dcd,
+    type: 3}
   m_serverCamera: {fileID: 0}
-  m_serverNPCCount: 20
+  m_serverNPCCount: 40
 --- !u!114 &5045507660991760139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,10 +66,11 @@ MonoBehaviour:
   ClientTick: 0
   LastRecievedServerTick: 0
   m_poolSize: 10
-  m_bulletPrefab: {fileID: 6021412467207159410, guid: e83fa22c6e2534cde91dea9e0387f17e, type: 3}
+  m_bulletPrefab: {fileID: 6021412467207159410, guid: e83fa22c6e2534cde91dea9e0387f17e,
+    type: 3}
   m_ping: {fileID: 0}
   m_visInterval: 1
-  m_visRange: 100
+  m_visRange: 40
   m_useHitScan: 1
 --- !u!114 &7881545253864222932
 MonoBehaviour:

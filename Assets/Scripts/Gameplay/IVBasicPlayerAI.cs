@@ -17,14 +17,14 @@ public class IVBasicPlayerAI : MonoBehaviour
     private void Awake()
     {
         m_cachedTransform = transform;
-#if DEDICATED_SERVER && !UNITY_EDITOR
-        // Read m_allowMovement from commandline arguments for Server
-        string[] args = System.Environment.GetCommandLineArgs();
-        if (null != args && args.Length >= 3)
-        {
-            m_allowMovement = System.Convert.ToBoolean(args[args.Length - 1]);
-        }
-#endif
+//#if DEDICATED_SERVER && !UNITY_EDITOR
+//        // Read m_allowMovement from commandline arguments for Server
+//        string[] args = System.Environment.GetCommandLineArgs();
+//        if (null != args && args.Length >= 3)
+//        {
+//            m_allowMovement = System.Convert.ToBoolean(args[args.Length - 1]);
+//        }
+//#endif
 
     }
 
